@@ -120,5 +120,7 @@
 - Developed a **comprehensive understanding of the data life cycle** and various stages involved in data analysis.
 - Introduced to diverse application designs to streamline and optimize the **data analysis journey**, enhancing efficiency and accuracy.
 
+ind amk dw wnjen jd  ijf diod din  aind uunndi c 
+kieoejjen
 ---
 

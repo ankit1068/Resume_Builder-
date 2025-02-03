@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare - Appointment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_7AU2xi4EzkIJVUmcdfKDCYim_W2-pq0Trw&s');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            color: #4b2e1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        h1 {
+            color: #ffa500; /* Change text color */
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: rgba(255, 248, 220, 0.9);
+            padding: 20px; /* Slightly increased padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            width: 200%;
+            max-width: 400px; /* Slightly increased width */
+        }
+
+        input, button {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px; /* Increased padding for a bit more space */
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book an Appointment</h1>
+    <form id="appointmentForm">
+        <input type="text" id="patientName" placeholder="Enter patient name" required>
+        <input type="text" id="doctorName" placeholder="Enter doctor's name" required>
+        <input type="date" id="appointmentDate" placeholder="Appointment Date" required>
+        <input type="time" id="appointmentTime" placeholder="Appointment Time" required>
+        <small class="error" id="timeError">Appointment time must be between 09:00 and 17:00.</small>
+        <input type="tel" id="contactNumber" placeholder="Enter contact number" required>
+        <input type="text" id="reasonForVisit" placeholder="Reason for visit" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+
+    <script>
+        function isValidTime(time) {
+            const [hour, minute] = time.split(':').map(Number);
+            return hour >= 9 && (hour < 17 || (hour === 17 && minute === 0));
+        }
+
+        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const appointmentTime = document.getElementById('appointmentTime').value;
+            const timeError = document.getElementById('timeError');
+
+            if (!isValidTime(appointmentTime)) {
+                timeError.style.display = 'block';
+                return;
+            }
+
+            timeError.style.display = 'none';
+
+            const patientName = document.getElementById('patientName').value;
+            const doctorName = document.getElementById('doctorName').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const contactNumber = document.getElementById('contactNumber').value;
+            const reasonForVisit = document.getElementById('reasonForVisit').value;
+
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            appointments.push({ patientName, doctorName, appointmentDate, appointmentTime, contactNumber, reasonForVisit });
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+
+            alert('Appointment booked successfully!');
+            window.location.href = 'display3.html';
+        });
+    </script>
+</body>
+</html>

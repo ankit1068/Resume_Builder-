@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare - Appointments Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f7ff;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #f0f8ff;
+        }
+        th, td {
+            border: 1px solid #0096c7;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #0077b6;
+            color: #fff;
+        }
+        button {
+            background-color: #0077b6;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #00b4d8;
+        }
+        .edit-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+        .edit-form input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        #logoutButton {
+            float: right;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #logoutButton:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout Button -->
+    <button id="logoutButton">Logout</button>
+
+    <h1>Appointment Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Doctor Name</th>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Contact Number</th>
+                <th>Reason for Visit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="appointmentTableBody"></tbody>
+    </table>
+
+    <div class="edit-form" id="editForm">
+        <h2>Edit Appointment</h2>
+        <input type="text" id="editPatientName" placeholder="Patient Name" required>
+        <input type="text" id="editDoctorName" placeholder="Doctor Name" required>
+        <input type="date" id="editAppointmentDate" required>
+        <input type="time" id="editAppointmentTime" required>
+        <input type="tel" id="editContactNumber" placeholder="Contact Number" required>
+        <input type="text" id="editReasonForVisit" placeholder="Reason for Visit" required>
+        <button id="saveChangesButton">Save Changes</button>
+        <button id="cancelEditButton">Cancel</button>
+    </div>
+
+    <script>
+        let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+        const tableBody = document.getElementById('appointmentTableBody');
+        const editForm = document.getElementById('editForm');
+        let currentEditIndex = null;
+
+        function renderTable() {
+            tableBody.innerHTML = '';
+            appointments.forEach((appointment, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.patientName}</td>
+                    <td>${appointment.doctorName}</td>
+                    <td>${appointment.appointmentDate}</td>
+                    <td>${appointment.appointmentTime}</td>
+                    <td>${appointment.contactNumber}</td>
+                    <td>${appointment.reasonForVisit}</td>
+                    <td>
+                        <button onclick="editAppointment(${index})">Edit</button>
+                        <button onclick="deleteAppointment(${index})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function editAppointment(index) {
+            currentEditIndex = index;
+            const appointment = appointments[index];
+            document.getElementById('editPatientName').value = appointment.patientName;
+            document.getElementById('editDoctorName').value = appointment.doctorName;
+            document.getElementById('editAppointmentDate').value = appointment.appointmentDate;
+            document.getElementById('editAppointmentTime').value = appointment.appointmentTime;
+            document.getElementById('editContactNumber').value = appointment.contactNumber;
+            document.getElementById('editReasonForVisit').value = appointment.reasonForVisit;
+            editForm.style.display = 'block';
+        }
+
+        document.getElementById('saveChangesButton').addEventListener('click', function() {
+            if (currentEditIndex !== null) {
+                appointments[currentEditIndex] = {
+                    patientName: document.getElementById('editPatientName').value,
+                    doctorName: document.getElementById('editDoctorName').value,
+                    appointmentDate: document.getElementById('editAppointmentDate').value,
+                    appointmentTime: document.getElementById('editAppointmentTime').value,
+                    contactNumber: document.getElementById('editContactNumber').value,
+                    reasonForVisit: document.getElementById('editReasonForVisit').value,
+                };
+                localStorage.setItem('appointments', JSON.stringify(appointments));
+                renderTable();
+                editForm.style.display = 'none';
+                currentEditIndex = null;
+            }
+        });
+
+        document.getElementById('cancelEditButton').addEventListener('click', function() {
+            editForm.style.display = 'none';
+            currentEditIndex = null;
+        });
+
+        function deleteAppointment(index) {
+            appointments.splice(index, 1);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            renderTable();
+        }
+
+        // Logout button functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            window.location.href = 'logout.html';
+        });
+
+        renderTable();
+    </script>
+</body>
+</html>

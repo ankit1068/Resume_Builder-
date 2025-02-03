@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Portal Login</title>
+    <style>
+        body {
+            background-image: url('https://jgu.edu.in/blog/wp-content/uploads/2023/12/shutterstock_1456161239.jpg'); /* Updated background image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: rgba(245, 245, 245, 0.9); /* Light background for readability */
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            width: 350px;
+            margin: auto;
+            margin-top: 100px;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            color: #2E8B57; /* Health-related green color */
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #4682B4;
+            border-radius: 8px;
+            width: 100%;
+        }
+        button {
+            padding: 12px;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2E8B57;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="login-form" id="loginForm">
+            <h1>Welcome to HealthCare Portal</h1>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Login</button>
+            <p class="signup-link">New to the portal? <a href="signup.html">Sign up here</a></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+
+            // Basic validation: Check if username is filled and password is numeric
+            if (username && /^[0-9]+$/.test(password)) {
+                // Redirect to index2.html (appointment booking page) on successful login
+                window.location.href = 'index2.html';
+            } else {
+                // Display an error message if validation fails
+                const error = document.createElement('p');
+                error.id = 'error-message';
+                error.style.color = 'red';
+                error.style.marginTop = '5px';
+                error.textContent = 'Invalid username or password. Ensure the password is numeric.';
+                document.querySelector('.input-group').appendChild(error);
+            }
+        });
+    </script>
+</body>
+</html>
